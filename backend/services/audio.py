@@ -18,26 +18,7 @@ def init_audio():
 
     return p, default_index
 
-def record_sample(p, device_index, duration=2, fs=44100):
-    """
-    Enregistre du mono audio, (un sample) depuis le micro donne.
-    Renvoie un vecteur numpy de floats normalises €[-1;1].
-    """
-    print(f"Enregistrement de {duration} secondes utilisant l'appareil {device_index}...")
 
-    stream = p.open(format=pyaudio.paInt16, channels=1, rate=fs, input=True, input_device_index=device_index, frames_per_buffer=1024)
-
-    frames = []
-    for _ in range(0, int(fs / 1024 * duration)):
-        data = stream.read(1024,exeption_on_overflow=False)
-        frames.append(np.frombuffer(data, dtype=np.int16))
-
-    stream.stop_stream()
-    stream.close()
-
-    signal = np.concatenate(frames)
-    signal = normalise_signal(signal)
-    return signal, fs
 
 def normalise_signal(signal):
     """Normalise le sample audio a un float32 dans [-1;1] et suprime le decalage CC (le deplacement d'amplitude moyen par rappport a zero)"""

@@ -28,21 +28,17 @@ Trop haute (sharp ou aiguë),
 
 Ou juste (in tune).
 
+Dans ce projet on utilisera la methode de Transformation de Fourier Rapide une methode seulement vue en L3.
+ (TFD) (fr.wikipedia.org/wiki/Transoformation_de_Fourier_rapide)
+
 ---------------------------
-STRUCTURE DU REPO:
-├── backend/          → Server-side logic (API + sound processing)
-│   ├── app.py        → Main FastAPI entry point
-│   ├── services/     → Core modules (tuner logic, instruments data)
-│   ├── tests/        → All backend tests (pytest)
-│   └── requirements.txt
-│
-├── frontend/         → Client-side web app (React)
-│   ├── public/       → Static assets (icons, images)
-│   ├── src/          → Main source files
-│   │   ├── components/ → Reusable UI parts (TunerDisplay, etc.)
-│   │   ├── pages/      → App pages (Home, Settings)
-│   │   ├── services/   → API requests to backend
-│   │   └── App.jsx     → Main app entry
-│   └── package.json
-│
-└── README.md         → VZ ETES ICI
+Notes:
+19/11/25:
+Jules- Jai realise que j'ai cree une fonction "record_sample" qui ne sert franchement a rien, car si un individus utilisant cet accordeur aurait ses deux mains prises, un arche et le violon lui meme dans ses mains, il n'a donc pas de doigts disponibles pour appuyer sur "Enregistrer" qui appele la fonction record_sample.
+
+Donc jai change pas mal de trucs, ajoute un fichier .py audio_stream (jai demande a chatgpt comment faire bien sur) qui nous laisse enregistrer en continue et calculer la frequence fondamentale, qui a beaucoup plus de sens. Le changement appropries ont eu lieu dans app.py
+
+jai aussi cree la structure html de base pour qu'on puisse lire des infos lorsquon test.
+
+
+
