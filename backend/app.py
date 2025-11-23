@@ -1,4 +1,6 @@
-from fastapi import FastAPI 
+from fastapi import FastAPI, UploadFile, File
+from pydantic import BaseModel
+from audio.analyser import analyse_audio_file 
 from services.audio import init_audio
 from services.audio_stream import AudioStream
 
@@ -17,4 +19,22 @@ def get_pitch():
     frequency = audio_stream.get_frequency()
     return {"frequency_hz": round(frequency, 2)}
 
-    
+
+class AnalyseResponse(BaseModel):
+    frequency: float
+    note: str
+    cents_off: float
+
+@app.post("/analyse", response_model=AnalyseResponse)
+async def analyse(file:UploadFile = File(...)):
+    """Recoit l'audio (wav, mp3, raw) et renvoie la note et frequence"""
+    audio_bytes = await file.read()
+
+    result = analyse_audio_file(audio_bytes)
+
+    return AnalyseResponse(
+        frequency=result['frequency'], 
+        note=result['note']
+        cents_off=result['cents_off']
+    )    
+
