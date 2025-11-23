@@ -33,12 +33,3 @@ Dans ce projet on utilisera la methode de Transformation de Fourier Rapide une m
 
 ---------------------------
 Notes:
-19/11/25:
-Jules- Jai realise que j'ai cree une fonction "record_sample" qui ne sert franchement a rien, car si un individus utilisant cet accordeur aurait ses deux mains prises, un arche et le violon lui meme dans ses mains, il n'a donc pas de doigts disponibles pour appuyer sur "Enregistrer" qui appele la fonction record_sample.
-
-Donc jai change pas mal de trucs, ajoute un fichier .py audio_stream (jai demande a chatgpt comment faire bien sur) qui nous laisse enregistrer en continue et calculer la frequence fondamentale, qui a beaucoup plus de sens. Le changement appropries ont eu lieu dans app.py
-
-jai aussi cree la structure html de base pour qu'on puisse lire des infos lorsquon test.
-
-
-
