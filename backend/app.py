@@ -33,8 +33,8 @@ async def analyse(file:UploadFile = File(...)):
     result = analyse_audio_file(audio_bytes)
 
     return AnalyseResponse(
-        frequency=result['frequency'], 
-        note=result['note']
+        frequency = result['frequency'], 
+        note = result['note'],
         cents_off=result['cents_off']
     )    
 
