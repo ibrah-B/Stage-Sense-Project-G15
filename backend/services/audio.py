@@ -1,6 +1,8 @@
 import pyaudio
 import numpy as np
 
+
+
 def init_audio():
     """
     Lister tous les systemes d'input (micros) et print les infos de l'appareil (par defaut)
@@ -30,3 +32,5 @@ def normalise_signal(signal):
     if max_val > 0:
         signal /= max_val #le normaliser entre -1 et 1
     return signal
+
+
