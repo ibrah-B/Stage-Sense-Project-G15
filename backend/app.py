@@ -207,7 +207,7 @@ Table_note_guitare = [
     ["Re#5", "D#5", 622.25],
     ["Mi5", "E5", 659.26],
 ]
-
+.dev
 #Initialisation de PyAudio et trouver l'appareil d'enregistrement.
 p, device_index = init_audio()
 
