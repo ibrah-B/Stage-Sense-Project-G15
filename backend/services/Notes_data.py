@@ -1,6 +1,7 @@
+import numpy as np
 #Initialisation des tables de notes/Frequences selon les instruments.
 #Pour les Violons   Note fr, Note international et la fréquence en HZ, selon les octaves utiles d'un violon, 3-7:
-Table_notes_violon  =[
+Table_note_violon  =[
     #Corde 4 
     ["Sol3", "G3", 196.00],
     ["Sol#3 / Lab3", "G#3 / Ab3", 207.65],
@@ -201,3 +202,34 @@ Table_note_guitare = [
     ["Re#5", "D#5", 622.25],
     ["Mi5", "E5", 659.26],
 ]
+
+
+
+#Fonction de comparaison de la fréquence enregistrée avec les differentes notes des tableaux.
+def comparateur(frequence, instrument, solfege):
+    '''La fonction renvoie la note fr ou en international selon le solfege choisi en fonction de la fréquence enregistrée et de l'instruments choisi et l'écart entre la fréquence enregistrée et la note la plus proche en Hz.
+    les tableaux des notes sont ordonnees en fonction de la fréquence'''
+
+    #on prend la table selon l'instrument utilise par l'utilisateur
+    if instrument == 'violon':
+        table = table_note_violon
+    elif instrument == 'guitare':
+        table = table_note_guitare
+    else:
+        table = table_note_basse
+
+    #on cherche la note la plus proche de la frequence dans la table
+    for i in range(len(table)):
+            if table[i][2] == frequence:
+                note = table[i][2]
+            if table[i][2] <= frequence and table[i+1][2] >= frequence:
+                if np.abs(table[i][2] - frequence) < np.abs(table[i+1][2] - frequence):
+                    note = (table[i][2], np.abs(table[i][2] - frequence) 
+
+    #on renvoie la note en solfege francais on international selon les choix de l'utilisateur
+    if solfege == 'francais':
+        return (note[0][0], note[1])
+    if solfege == 'international':
+        return (note[0][1], note[1]) 
+                    
+                
