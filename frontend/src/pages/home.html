@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Accordeur - Test Page</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            text-align: center;
+        }
+        #freq {
+            font-size: 3rem;
+            margin-top: 20px;
+        }
+        #note {
+            font-size: 2rem;
+            margin-top: 10px;
+        }
+        #status {
+            margin-top: 20px;
+            color: gray;
+            font-size: 1rem;
+        }
+        input {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Accordeur – Test Live</h1>
+
+    <div id="freq">-- Hz</div>
+    <div id="note"></div>
+    <div id="status">Polling 200ms…</div>
+
+    <h2>Analyse d’un fichier audio</h2>
+    <input type="file" id="fileInput" accept="audio/*">
+
+    <script>
+        const SERVER_URL = "http://raspberrypi.local:8000";
+
+        // ---- POLLING DU /pitch ----
+        async function pollPitch() {
+            try {
+                const response = await fetch(`${SERVER_URL}/pitch`);
+                const data = await response.json();
+
+                document.getElementById("freq").innerText =
+                    data.frequency_hz + " Hz";
+
+            } catch (err) {
+                document.getElementById("status").innerText =
+                    "Erreur de connexion au backend";
+            }
+        }
+
+        // Polling toutes les 200 ms
+        setInterval(pollPitch, 200);
+
+
+        // ---- ANALYSE D’UN FICHIER AUDIO ----
+        document.getElementById("fileInput").addEventListener("change", async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch(`${SERVER_URL}/analyse`, {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+
+            document.getElementById("note").innerText =
+                `Note : ${result.note} | Cents : ${result.cents_off.toFixed(2)}`;
+        });
+    </script>
+
+</body>
+</html>
