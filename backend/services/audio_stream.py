@@ -1,39 +1,58 @@
-import pyaudio
-import numpy as np
-from audio import normalise_signal
-from fft import estimate_pitch
 import threading
-import time
+import numpy as np
+import sounddevice as sd  # make sure you have sounddevice installed
 
+#Cette classe genere par chatgpt nous permet d'enregistrer notre instruments en continue (en samples), ces samples sont en suite
+#convertis en array np pour les donner directement a audio.normalise_signal. la derniere methode est la plus 
+#importante pour avoir une analyse hyper precise
 class AudioStream:
-    def __init__(self, device_index, fs=48000, chunk_size=1024):
+    def __init__(self, fs=48000, chunk_size=2048):
+        """
+        fs: sampling rate in Hz
+        chunk_size: number of samples per chunk
+        """
         self.fs = fs
         self.chunk_size = chunk_size
-        self.device_index = device_index
-        self.signal = np.zeros(chunk_size)
-        self.freq = 0
-        self.running = False
-        self.p = pyaudio.PyAudio()
-        self.stream = None
+        self.latest_chunk = np.zeros(chunk_size, dtype=np.float32)
+        self.recording = False
+        self._thread = None
+
+    def _record_loop(self):
+        """
+        Continuously records audio in a background thread.
+        """
+        def callback(indata, frames, time, status):
+            # indata is shape (frames, channels), take first channel
+            mono = indata[:, 0]
+            # Normalize to -1.0 → +1.0 (if not already)
+            self.latest_chunk = mono.astype(np.float32)
+
+        with sd.InputStream(samplerate=self.fs, channels=1, callback=callback,
+                            blocksize=self.chunk_size):
+            while self.recording:
+                sd.sleep(100)  # small sleep to avoid busy loop
 
     def start(self):
-        self.running = True
-        self.stream = self.p.open(format=pyaudio.paInt16, channels=1, rate=self.fs, input=True, input_device_index=self.device_index, frames_per_buffer=self.chunk_size)
-        threading.Thread(target=self._update, daemon=True).start()
-
-    def _update(self):
-        while self.running:
-            data = self.stream.read(self.chunk_size, exception_on_overflow=False)
-            signal = normalise_signal(np.frombuffer(data, dtype=np.int16))
-            self.signal = signal
-            self.freq = estimate_pitch(signal, self.fs)
-            time.sleep(0.01) #petit decalage pour ne pas griller le processeur
-    def get_frequency(self):
-        return self.freq
+        """
+        Start continuous recording in a background thread.
+        """
+        if self.recording:
+            return  # already running
+        self.recording = True
+        self._thread = threading.Thread(target=self._record_loop, daemon=True)
+        self._thread.start()
 
     def stop(self):
-        self.running = False
-        if self.stream:
-            self.stream.stop_stream()
-            self.stream.close()
-        self.p.terminate()
+        """
+        Stop recording cleanly.
+        """
+        self.recording = False
+        if self._thread is not None:
+            self._thread.join()
+            self._thread = None
+
+    def get_latest_samples(self):
+        """
+        Returns the latest recorded chunk as a NumPy float32 array.
+        """
+        return self.latest_chunk.copy()
