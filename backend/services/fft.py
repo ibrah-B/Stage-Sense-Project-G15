@@ -1,6 +1,6 @@
 import numpy as np
 
-def compute_fft(signal, fs):
+def compute_fft(signal, fs=48000):
     """Calcule la transformation de Fourier discrete du signal normalise.
     Renvoie un vecteur de frequence et un spectre de magnitude."""
 
@@ -10,7 +10,7 @@ def compute_fft(signal, fs):
     freqs = np.fft.rfftfreq(N, 1/fs)
     return freqs, fft_magnitude
 
-def estimate_pitch(signal, fs):
+def estimate_pitch(signal, fs=48000):
     """Estime la frequence en utilisant la maximum du vecteur FFT qu'on a trouve.
     Frequence en Hz."""
 

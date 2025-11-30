@@ -29,5 +29,6 @@ from services.audio import analyse_audio_bytes
 @app.post("/analyse")
 async def analyse(file: UploadFile = File(...)):
     audio_bytes = await file.read()
-    result = analyse_audio_bytes(audio_bytes)
+    instrument, solfege = 'Guitare', 'francais'
+    result = analyse_audio_bytes(audio_bytes, instrument, solfege)
     return result

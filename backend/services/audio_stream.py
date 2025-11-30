@@ -6,7 +6,7 @@ import threading
 import time
 
 class AudioStream:
-    def __init__(self, device_index, fs=44100, chunk_size=1024):
+    def __init__(self, device_index, fs=48000, chunk_size=1024):
         self.fs = fs
         self.chunk_size = chunk_size
         self.device_index = device_index

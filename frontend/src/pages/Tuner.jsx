@@ -1,22 +1,42 @@
-import {useEffect, useState } from "react";
-import {getPitch} from "../services/api";
+import React, { useState, useEffect } from 'react';
 
-export default function Tuner() {
-    const [frequency, setFrequency] = unesState(0);
-
+const Tuner = () => {
+    //nos variablees
+    const [frequency, setFrequency] = useState(0);
+    const [note, setNote] = useState('-') ; 
+    const [cents, setCents] = useState(0);
+    
     useEffect(() => {
+        //notre fonction de rafraichissement
         const interval = setInterval(async () => {
-            const freq = await getPitch();
-            if (freq) setFrequency(freq);
-        }, 200); // reinitialiser (poll) toutes les 200ms pour avoir un site internet LIVE
+            try {
+                const response = await fetch ('/analyse'); //appel du backend /analyse
+                const data = await response.json();
 
+                setFrequency(data.freq || 0);
+                setNote(data.note || '-');
+                setCents(data.cents || 0);
+                
+            } catch(error) {
+                console.error('Error fetching analyse data:', error);
+
+            }
+            
+        }, 300); // chaque 300 ms
+
+        //cleanup
         return () => clearInterval(interval);
+
     }, []);
 
     return (
         <div>
-            <h1>STAGE SENSE</h1>
+            <h2>Stage Sense</h2>
+            <p>Note: {note}</p>
             <p>Frequency: {frequency.toFixed(2)} Hz</p>
-            </div>
+            <p>Cents: {cents > 0 ? "+" : ''}</p>
+        </div>
     );
-}
+};
+
+export default Tuner;

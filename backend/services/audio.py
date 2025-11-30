@@ -19,7 +19,8 @@ def init_audio():
 
     return p, default_index
 
-
+def pcm_sampler(audio_bytes):
+    return None
 
 def normalise_signal(signal):
     """Normalise le sample audio a un float32 dans [-1;1] et suprime le decalage CC (le deplacement d'amplitude moyen par rappport a zero)"""
@@ -31,3 +32,4 @@ def normalise_signal(signal):
     if max_val > 0:
         signal /= max_val #le normaliser entre -1 et 1
     return signal
+

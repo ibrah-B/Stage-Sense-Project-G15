@@ -1,4 +1,7 @@
 import numpy as np
+
+#POUR L'INSTANT ON CVA NORMALISER LES INSTRUMENTS ET LES SOLFEGES: VOIR DANS TUNER.PY
+
 #Initialisation des tables de notes/Frequences selon les instruments.
 #Pour les Violons   Note fr, Note international et la fréquence en HZ, selon les octaves utiles d'un violon, 3-7:
 Table_note_violon  =[
@@ -155,7 +158,7 @@ Table_note_guitare = [
     ["Si3", "B3", 246.94],
     ["Do4", "C4", 261.63],
     ["Do#4 / Reb4", "C#4 / Db4", 277.18],
-    ["Re4", "D4", 293.66]
+    ["Re4", "D4", 293.66], 
 
     # Corde 3 
     ["Sol3", "G3", 196.00],
@@ -206,17 +209,19 @@ Table_note_guitare = [
 
 
 #Fonction de comparaison de la fréquence enregistrée avec les differentes notes des tableaux.
-def comparateur(frequence, instrument, solfege):
+def comparateur(frequence, instrument='guitare', solfege='francais'):
     '''La fonction renvoie la note fr ou en international selon le solfege choisi en fonction de la fréquence enregistrée et de l'instruments choisi et l'écart entre la fréquence enregistrée et la note la plus proche en Hz.
     les tableaux des notes sont ordonnees en fonction de la fréquence'''
 
+    #calcul de la diff en cents: utile pour une mesure plus precise
+    
     #on prend la table selon l'instrument utilise par l'utilisateur
     if instrument == 'violon':
-        table = table_note_violon
+        table = Table_note_violon
     elif instrument == 'guitare':
-        table = table_note_guitare
+        table = Table_note_guitare
     else:
-        table = table_note_basse
+        table = Table_note_basse
 
     #on cherche la note la plus proche de la frequence dans la table
     for i in range(len(table)):
@@ -224,12 +229,17 @@ def comparateur(frequence, instrument, solfege):
                 note = table[i][2]
             if table[i][2] <= frequence and table[i+1][2] >= frequence:
                 if np.abs(table[i][2] - frequence) < np.abs(table[i+1][2] - frequence):
-                    note = (table[i][2], np.abs(table[i][2] - frequence) 
+                    note = (table[i][2], (table[i][2] - frequence) )
+    
 
-    #on renvoie la note en solfege francais on international selon les choix de l'utilisateur
+    #on renvoie la note en solfege francais ou international selon les choix de l'utilisateur
     if solfege == 'francais':
         return (note[0][0], note[1])
     if solfege == 'international':
         return (note[0][1], note[1]) 
                     
                 
+def cends_diff( frequence,instrument='guitare', solfege='francais'):
+    note_freq =  comparateur(frequence, instrument, solfege='francais')[0]
+
+    return (1200 * np.log2(frequence  /  note_freq))
