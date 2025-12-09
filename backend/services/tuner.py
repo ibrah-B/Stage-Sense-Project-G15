@@ -1,4 +1,4 @@
-import audio
+from . import audio
 import fft
 import Notes_data
 
