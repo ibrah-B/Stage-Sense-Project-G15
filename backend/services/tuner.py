@@ -1,6 +1,5 @@
 import audio
 import fft
-import instruments
 import Notes_data
 
 
