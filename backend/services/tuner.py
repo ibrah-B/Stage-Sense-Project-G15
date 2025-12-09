@@ -4,10 +4,9 @@ from . import Notes_data
 from . import audio_stream
 
 
-def analyse_audio_bytes(audio_bytes, instrument='guitare', solfege='francais'):
+def analyse_audio_bytes(signal):
 
-    signal_raw = audio_stream.AudioStream.get_latest_samples()
-    signal_norm = audio.normalise_signal(signal_raw)
+    signal_norm = audio.normalise_signal(signal)
 
     frequence_calc = fft.estimate_pitch(signal_norm, 48000)
 
