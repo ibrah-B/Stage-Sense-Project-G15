@@ -1,6 +1,6 @@
 from . import audio
-import fft
-import Notes_data
+from . import fft
+from . import Notes_data
 
 
 def analyse_audio_bytes(audio_bytes, instrument='guitare', solfege='francais'):
