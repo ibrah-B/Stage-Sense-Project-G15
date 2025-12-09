@@ -11,7 +11,7 @@ def analyse_audio_bytes(signal):
     frequence_calc = fft.estimate_pitch(signal_norm, 48000)
 
     note_pp, diff_note_hz = Notes_data.comparateur(frequence_calc) 
-    cents_diff = Notes_data.cends_diff(frequence_calc)
+    cents_diff = Notes_data.cents_diff(frequence_calc)
 
     return {
         "freq": frequence_calc,

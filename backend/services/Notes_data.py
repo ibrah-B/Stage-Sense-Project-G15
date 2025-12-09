@@ -133,6 +133,6 @@ def comparateur(frequence, table=NOTES_SOLFEGE):
     return note_name, closest_freq
 
                 
-def cends_diff(frequence):
+def cents_diff(frequence):
     note_freq =  comparateur(frequence)[0]
     return (1200 * np.log2(frequence  /  note_freq))
