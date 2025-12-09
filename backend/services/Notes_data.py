@@ -111,26 +111,27 @@ NOTES_SOLFEGE = [
 ]
 
 
+import numpy as np
 
+def comparateur(frequence, table=NOTES_SOLFEGE):
+    """
+    renvoie:
+        (note nom, freq plus proche)
+    """
 
+    # extraire les freq de la table
+    freqs = [row[1] for row in table]
 
-#Fonction de comparaison de la fréquence enregistrée avec les differentes notes des tableaux.
-def comparateur(frequence, table=NOTES_SOLFEGE) -> tuple:
-    '''La fonction renvoie la note fr ou en international selon le solfege choisi en fonction de la fréquence enregistrée et de l'instruments choisi et l'écart entre la fréquence enregistrée et la note la plus proche en Hz.
-    les tableaux des notes sont ordonnees en fonction de la fréquence'''
+    # freq la plus proche
+    diffs = [abs(f - frequence) for f in freqs]
+    idx = diffs.index(min(diffs))
 
+    # trouver note la plus proche
+    note_name = table[idx][0]      # "Do4"
+    closest_freq = table[idx][1]   # 261.63
 
-    #on cherche la note la plus proche de la frequence dans la table
-    for i in range(len(table)):
-            if table[i][1] == frequence:
-                note = table[i][1]
-            if table[i][1] <= frequence and table[i+1][1] >= frequence:
-                if np.abs(table[i][1] - frequence) < np.abs(table[i+1][1] - frequence):
-                    note = (table[i][1], (table[i][1] - frequence) )
-    #notez que notes est de forme : ( nom, difference de frequece avec a note parfaite)
+    return note_name, closest_freq
 
-    return note[0], note[1]
-                    
                 
 def cends_diff(frequence):
     note_freq =  comparateur(frequence)[0]
