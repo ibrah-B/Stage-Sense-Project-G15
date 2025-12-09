@@ -2,8 +2,7 @@ import numpy as np
 
 #POUR L'INSTANT ON CVA NORMALISER LES INSTRUMENTS ET LES SOLFEGES: VOIR DANS TUNER.PY
 
-#Initialisation des tables de notes/Frequences selon les instruments.
-#Pour les Violons   Note fr, Note international et la fréquence en HZ, selon les octaves utiles d'un violon, 3-7:
+#Initialisation du tableau de notes/Frequences sur 8 octaves en solfège FR: 
 
 NOTES_SOLFEGE = [
     ["La0", 27.50],
