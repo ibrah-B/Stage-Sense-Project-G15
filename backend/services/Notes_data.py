@@ -133,6 +133,18 @@ def comparateur(frequence, table=NOTES_SOLFEGE):
     return note_name, closest_freq
 
                 
-def cents_diff(frequence):
-    note_freq =  comparateur(frequence)[0]
-    return (1200 * np.log2(frequence  /  note_freq))
+import numpy as np
+
+def cents_diff(frequence, note_freq):
+    """
+    frequence: measured frequency
+    note_freq: ideal frequency of the closest note
+    """
+    try:
+        f = float(frequence)
+        n = float(note_freq)
+    except:
+        print("ERROR: cents_diff received invalid inputs:", frequence, note_freq)
+        return 0  # prevent crash
+
+    return 1200 * np.log2(f / n)
