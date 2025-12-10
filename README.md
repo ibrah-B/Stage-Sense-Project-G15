@@ -32,39 +32,36 @@ Pour ce projet, nous utilisons la **Transformée de Fourier Rapide (TFD / FFT)**
 
 ## Structure du projet
 
+```markdown
 .
 ├── README.md
 ├── backend
-│ ├── app.py # Point d'entrée du backend
-│ ├── requirements.txt # Dépendances Python
-│ └── services # Modules Python pour l'analyse audio
-│ ├── Notes_data.py # Base de données des notes et comparateur
-│ ├── pycache/ # Cache Python
-│ │ ├── Notes_data.cpython-312.pyc
-│ │ ├── audio.cpython-312.pyc
-│ │ ├── fft.cpython-312.pyc
-│ │ └── instruments.cpython-312.pyc
-│ ├── audio.py # Gestion de l’audio
-│ ├── audio_stream.py # Streaming audio en temps réel
-│ ├── fft.py # Transformée de Fourier
-│ ├── instruments.py # Informations sur les instruments
-│ └── tuner.py # Logique principale de l’accordeur
+│   ├── app.py
+│   ├── requirements.txt
+│   └── services
+│       ├── Notes_data.py
+│       ├── audio.py
+│       ├── audio_stream.py
+│       ├── fft.py
+│       ├── instruments.py
+│       └── tuner.py
 └── frontend
-    ├── package.json # Dépendances frontend
+    ├── package.json
     ├── public
-    │ └── index.html # Page HTML principale
+    │   └── index.html
     └── src
-    ├── App.js # Composant principal React
-    ├── Tuner.jsx # Interface de l’accordeur
-    └── index.js # Point d’entrée React
+        ├── App.js
+        ├── Tuner.jsx
+        └── index.js
 
 
+```
 ---
 
 ## Fonctionnement général
 
 1. **Capture audio** : le microphone USB envoie le flux sonore vers le backend.  
-2. **Analyse du signal** : le backend utilise la FFT pour convertir le signal en domaine fréquentiel.  
+2. **Analyse du signal** : le backend utilise la FFT (dans `ftt.py`)pour convertir le signal en domaine fréquentiel.  
 3. **Comparaison avec les notes de référence** : le module `Notes_data.py` contient les fréquences standard de chaque note et permet de calculer l’écart en *cents*.  
 4. **Transmission au frontend** : l’information sur la note détectée et son écart est envoyée à l’interface React.  
 5. **Affichage utilisateur** : `Tuner.jsx` affiche en temps réel la note jouée, la fréquence et l’écart, permettant à l’utilisateur d’accorder son instrument rapidement.
@@ -80,14 +77,14 @@ python -m venv venv        # Créer un environnement virtuel
 source venv/bin/activate   # Activer l'environnement
 pip install -r requirements.txt
 python app.py              # Lancer le serveur
-
+```
 
 ### Frontend(React)
 ```bash
 cd frontend
 npm install
 npm start                  # Lancer l’interface utilisateur
-
+```
 ---
 
 ##Points techniques clés
@@ -106,4 +103,4 @@ Le projet est conçu pour être facilement extensible à différents instruments
 
 La précision dépend de la qualité du microphone et du traitement en temps réel.
 
-Les caches Python (__pycache__) sont générés automatiquement et peuvent être ignorés pour la version finale.
+Les caches Python (`__pycache__`) sont générés automatiquement et peuvent être ignorés pour la version finale.
