@@ -1,35 +1,109 @@
-# Stage Sense
-Groupe 15 MI8
-Membres du groupe:
+# Stage Sense – Accordeur Musical
+**Groupe 15 MI8**  
 
-Ibrahim Boubaya
+**Membres :**  
+- Ibrahim Boubaya  
+- Yassine Elmokhtari  
+- Jules Decorps (n° 21506930)  
 
-Yassine Elmokhtari
+---
 
-Jules Decorps n0 21506930
+## Description du projet
+
+Ce projet vise à créer un **accordeur musical logiciel** utilisable sur un Raspberry Pi 4B avec un microphone USB.  
+Un accordeur (ou *tuner*) est un dispositif permettant de déterminer la hauteur exacte d’un son musical pour ajuster un instrument et s’assurer que chaque note émise correspond à la fréquence souhaitée.
+
+Lorsqu’un instrument (guitare, violon, basse…) joue une note, le son produit est une **onde sonore caractérisée par sa fréquence** (mesurée en Hertz, Hz). L’accordeur capte cette onde et l’analyse pour déterminer :
+
+- La **fréquence fondamentale** de la note jouée  
+- L’écart entre cette fréquence et la fréquence de référence (exemple : 440 Hz pour le La standard)  
+
+Grâce à cette analyse, l’accordeur peut indiquer si la note est :  
+
+- Trop basse (*flat* ou grave)  
+- Trop haute (*sharp* ou aiguë)  
+- Correcte (*in tune*)  
+
+Pour ce projet, nous utilisons la **Transformée de Fourier Rapide (TFD / FFT)** afin de transformer le signal temporel capté en un signal fréquentiel. Cette méthode permet d’isoler les différentes fréquences composant un son complexe et d’identifier précisément la note jouée.  
+
+> La décomposition d’un signal en série de Fourier consiste à représenter une fonction périodique comme une somme de sinus et de cosinus de différentes fréquences et amplitudes. C’est ce principe qui est exploité dans la FFT pour analyser les sons en temps réel.
+
+---
+
+## Structure du projet
+
+.
+├── README.md
+├── backend
+│ ├── app.py # Point d'entrée du backend
+│ ├── requirements.txt # Dépendances Python
+│ └── services # Modules Python pour l'analyse audio
+│ ├── Notes_data.py # Base de données des notes et comparateur
+│ ├── pycache/ # Cache Python
+│ │ ├── Notes_data.cpython-312.pyc
+│ │ ├── audio.cpython-312.pyc
+│ │ ├── fft.cpython-312.pyc
+│ │ └── instruments.cpython-312.pyc
+│ ├── audio.py # Gestion de l’audio
+│ ├── audio_stream.py # Streaming audio en temps réel
+│ ├── fft.py # Transformée de Fourier
+│ ├── instruments.py # Informations sur les instruments
+│ └── tuner.py # Logique principale de l’accordeur
+└── frontend
+    ├── package.json # Dépendances frontend
+    ├── public
+    │ └── index.html # Page HTML principale
+    └── src
+    ├── App.js # Composant principal React
+    ├── Tuner.jsx # Interface de l’accordeur
+    └── index.js # Point d’entrée React
 
 
+---
 
-Un accordeur (ou tuner, en anglais) est un dispositif — physique ou logiciel — permettant de déterminer la hauteur exacte d’un son musical afin d’ajuster un instrument pour qu’il produise les notes correctes. En d’autres termes, il aide les musiciens à s’assurer que chaque corde ou note émise correspond à la fréquence souhaitée.
+## Fonctionnement général
+
+1. **Capture audio** : le microphone USB envoie le flux sonore vers le backend.  
+2. **Analyse du signal** : le backend utilise la FFT pour convertir le signal en domaine fréquentiel.  
+3. **Comparaison avec les notes de référence** : le module `Notes_data.py` contient les fréquences standard de chaque note et permet de calculer l’écart en *cents*.  
+4. **Transmission au frontend** : l’information sur la note détectée et son écart est envoyée à l’interface React.  
+5. **Affichage utilisateur** : `Tuner.jsx` affiche en temps réel la note jouée, la fréquence et l’écart, permettant à l’utilisateur d’accorder son instrument rapidement.
+
+---
+
+## Installation & Exécution
+
+### Backend (Python)
+```bash
+cd backend
+python -m venv venv        # Créer un environnement virtuel
+source venv/bin/activate   # Activer l'environnement
+pip install -r requirements.txt
+python app.py              # Lancer le serveur
 
 
-Lorsqu’un instrument (comme une guitare, un violon ou une basse) joue une note, le son produit est une onde caractérisée par sa fréquence — mesurée en hertz (Hz).
-L’accordeur capte ce son à l’aide d’un microphone ou d’un capteur de vibration, puis analyse le signal pour identifier :
+### Frontend(React)
+```bash
+cd frontend
+npm install
+npm start                  # Lancer l’interface utilisateur
 
-- La fréquence fondamentale (la note principale jouée).
+---
 
-- L’écart entre cette fréquence et la fréquence de référence (par exemple, 440 Hz pour le La standard).
+##Points techniques clés
 
-À partir de cette analyse, l’accordeur indique si la note est :
+FFT (Fast Fourier Transform) : permet d’extraire les fréquences dominantes d’un signal complexe.
 
-Trop basse (flat ou grave),
+Cents : unité logarithmique mesurant l’écart entre deux fréquences musicales.
 
-Trop haute (sharp ou aiguë),
+Interface React : conçue pour un affichage lisible même en conditions de scène, avec informations claires sur la justesse de la note.
 
-Ou juste (in tune).
+---
 
-Dans ce projet on utilisera la methode de Transformation de Fourier Rapide une methode seulement vue en L3.
- (TFD) (fr.wikipedia.org/wiki/Transoformation_de_Fourier_rapide)
+##Remarques
 
----------------------------
-Notes:
+Le projet est conçu pour être facilement extensible à différents instruments (guitare, basse, violon…).
+
+La précision dépend de la qualité du microphone et du traitement en temps réel.
+
+Les caches Python (__pycache__) sont générés automatiquement et peuvent être ignorés pour la version finale.
