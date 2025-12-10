@@ -85,8 +85,19 @@ cd frontend
 npm install
 npm start                  # Lancer l’interface utilisateur
 ```
----
 
+### Lancer en 1 Coup (alphatest)
+```bash
+bash startME_valpha.sh
+```
+==> cette manip devrait lancer notreporjet integralement
+si l'execution de ce fichier ne vous est pas attribué, alors faire cette manip
+```bash 
+chmod +x startME_valpha.sh
+bash startME_valpha.sh
+```
+Notez que vous devez etre dans le root du projet pour faire cette manip.
+---
 ## Points techniques clés
 
 FFT (Fast Fourier Transform) : permet d’extraire les fréquences dominantes d’un signal complexe.
