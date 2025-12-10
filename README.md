@@ -87,7 +87,7 @@ npm start                  # Lancer l’interface utilisateur
 ```
 ---
 
-##Points techniques clés
+## Points techniques clés
 
 FFT (Fast Fourier Transform) : permet d’extraire les fréquences dominantes d’un signal complexe.
 
@@ -97,7 +97,7 @@ Interface React : conçue pour un affichage lisible même en conditions de scèn
 
 ---
 
-##Remarques
+## Remarques
 
 Le projet est conçu pour être facilement extensible à différents instruments (guitare, basse, violon…).
 
