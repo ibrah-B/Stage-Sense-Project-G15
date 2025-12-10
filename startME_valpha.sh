@@ -1,24 +1,39 @@
 #!/bin/bash
 
-# activation du vitual environment venv
+#trouver le path pour notre projet
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# --- BACKEND ---
 echo "Starting backend..."
-cd backend
+
+cd "$PROJECT_DIR/backend"
+
+# creer environnement virtuel
 if [ ! -d "venv" ]; then
   python3 -m venv venv
 fi
-source venv/bin/activate
+
+# activer venv
+source "$PROJECT_DIR/backend/venv/bin/activate"
+
+# installer les lib
 pip install -r requirements.txt
 
 # lancement du backend
 uvicorn app:app --host 0.0.0.0 --port 8000 &
 BACKEND_PID=$!
 
-# lancement du frontend
+
+
+# --- FRONTEND ---
 echo "Starting frontend..."
-cd ../frontend
+
+cd "$PROJECT_DIR/frontend"
+
 npm install
 npm start &
+
 FRONTEND_PID=$!
 
-# attente de l'achevement du frontend et backend
 wait $BACKEND_PID $FRONTEND_PID
+
